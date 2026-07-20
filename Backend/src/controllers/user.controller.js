@@ -6,7 +6,7 @@ const userRegister = async(req,res) =>{
 
     //now check if that input is give or not
     if(
-      [username, email,password].some((field => field?.trim() === ''))
+      [username, email,password].some((field => !field || field.trim() === ""))
     ){
       return res.status(400).json({
         message:"All field are required"
