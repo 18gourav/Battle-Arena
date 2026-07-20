@@ -19,3 +19,9 @@ app.listen(port,(req,res) =>{
 dotenv.config({
     path: './env'
 });
+
+//routes
+import userRoutes from "./routes/user.routes.js"
+
+app.use(express.json());
+app.use("/api/users",userRoutes)
