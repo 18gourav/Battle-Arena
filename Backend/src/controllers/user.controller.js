@@ -3,9 +3,9 @@ import { User } from "../models/user.model.js";
 const GenerateToken = async(userId) => {
      const user = await User.findById(userId);
 
-     const accessToken = user.generateAccessToken()
+     const accessToken = await user.generateAccessToken()
 
-     return accessToken
+     return accessToken;
 }
 
 const userRegister = async(req,res) =>{
@@ -60,9 +60,9 @@ const userLogin = async(req,res) => {
      //first take input from user
      const{email,password} = req.body;
 
-     if(!email){
+     if(!email || !password){
           return res.status(400).json({
-               message:"Email is mandatory to give"
+               message:"Email and password is mandatory to give"
           })
      }
 
@@ -84,7 +84,39 @@ const userLogin = async(req,res) => {
           })
      }
 
-     const accessToken
+     const accessToken = await GenerateToken(findUser._id);
+
+     const loggedUser = await User.findById(findUser._id).select(
+          '-password'
+     )
+
+     const options = {
+          httpOnly: true,
+          secure: true
+     } 
+
+     return res
+     .status(200)
+     .cookie('accessToken',accessToken,options)
+     .json({
+          message:"User logged in succesfully",
+          user:loggedUser,
+          accessToken
+     })
 }
 
-export {userRegister}
+const logoutUser = async(req,res) => {
+
+     const option = {
+          httpOnly:true,
+          secure:false
+     }
+
+     return res.status(400)
+     .clearCookie("accessToken",option)
+     .json({
+          message:"UserLogout Succesfully"
+     })
+}
+
+export {userRegister,userLogin,logoutUser}

@@ -39,7 +39,7 @@ UserSchema.pre('save',async function(next) {
 
 //now we will built a inbuilt function check our passowrd with hashed password
 UserSchema.methods.isPasswordCorrect = async function(password) {
-    return await bcrypt.compare(this.password,password);
+    return await bcrypt.compare(password,this.password);
 }
 
 UserSchema.methods.generateAccessToken = function () {
