@@ -1,5 +1,13 @@
 import { User } from "../models/user.model.js";
 
+const GenerateToken = async(userId) => {
+     const user = await User.findById(userId);
+
+     const accessToken = user.generateAccessToken()
+
+     return accessToken
+}
+
 const userRegister = async(req,res) =>{
     //first take input from a user
     const {username,email,password} = req.body;
@@ -46,6 +54,37 @@ const userRegister = async(req,res) =>{
         message:"User Created Succesfully",
         userCreated
    })
+}
+
+const userLogin = async(req,res) => {
+     //first take input from user
+     const{email,password} = req.body;
+
+     if(!email){
+          return res.status(400).json({
+               message:"Email is mandatory to give"
+          })
+     }
+
+     const findUser = await User.findOne({
+          email
+     })
+
+     if(!findUser){
+          return res.status(400).json({
+               message:"First register with this email"
+          })
+     }
+
+     const passwordMatch = await findUser.isPasswordCorrect(password)
+
+     if(!passwordMatch){
+          return res.status(401).json({
+               message:"Password is incorrect"
+          })
+     }
+
+     const accessToken
 }
 
 export {userRegister}
