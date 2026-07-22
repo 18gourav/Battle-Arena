@@ -3,21 +3,30 @@ import mongoose, { Schema } from 'mongoose';
 const QuestionSchema = new Schema({
     title:{
         type:String,
-        unique:true
+        unique:true,
+        required:true
     },
     level:{
         type:String,
         enum:[
-            'Easy',
-            'Medium',
-            'Hard'
-        ]
+            'easy',
+            'medium',
+            'hard'
+        ],
+        required:true
     },
-    Description:{
+    description:{
         type:String,
         required:true
     },
     testCases:[
+        {
+            input:String,
+            output:String,
+            Explanation:String
+        }
+    ],
+    examples:[
         {
             input:String,
             output:String,

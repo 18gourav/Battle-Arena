@@ -24,7 +24,8 @@ const RoomSchema = new Schema({
         enum:[
             'private',
             'matchmaking'
-        ]
+        ],
+        required:true
     },
     winner:{
         type:mongoose.Schema.Types.ObjectId,
@@ -33,8 +34,27 @@ const RoomSchema = new Schema({
     },
     question:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Question'
+        ref:'Question',
+        required:true
+    },
+    duration:{
+        type:Number,
+        enum:[15,20,25,30]
+    },
+    createdBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'
+    },
+    startedAt: {
+        type: Date,
+        default: null
+    },
+    endedAt: {
+        type: Date,
+        default: null
     }
-})
+},
+{timestamps:true}
+)
 
 export const Room = mongoose.model("Room",RoomSchema)
